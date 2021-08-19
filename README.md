@@ -1,3 +1,7 @@
+# Tener en cuenta
+
+Esta proyecto trabaja en conjunto con el repositorio chat-react-backend ( https://github.com/HenryVelasquezDev/chat-react-backend )
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
