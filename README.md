@@ -2,6 +2,18 @@
 
 Esta proyecto trabaja en conjunto con el repositorio chat-react-backend ( https://github.com/HenryVelasquezDev/chat-react-backend )
 
+# Configuración requerida
+Se debera crear un archivo con variable de entorno (.env.development) en la raiz del proyecto con el siguiente contenido para la configración correspondiente
+
+    ```
+        REACT_APP_API_URL= http://localhost:5050/api
+
+    ```
+Se debe tener en cuenta que las variables de entorno para que react las reconozca facilmente deben iniciar su definicion como REACT_APP_nombreDeseadoEnAdelante
+
+Luego de configurar una nueva variable de entorno se debe bajar y volver a subir el servidor de react para tomar en cuenta las variables definidas
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
