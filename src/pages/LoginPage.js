@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { AuthContext } from '../auth/AuthContext';
 
 export const LoginPage = () => {
@@ -16,11 +17,11 @@ export const LoginPage = () => {
     useEffect(() => {
         const remembermeEmail = localStorage.getItem('emailChatReact');
         if ( remembermeEmail ){
-            setForm({
+            setForm( (form) => ({ 
                 ...form,
                 rememberme: true,
                 email: remembermeEmail
-            });
+            }));
         }
     }, [])
 
@@ -40,7 +41,7 @@ export const LoginPage = () => {
         })
     }
 
-    const onSubmit = (ev) => {
+    const onSubmit = async (ev) => {
         ev.preventDefault();
 
         if (form.rememberme){
@@ -50,7 +51,11 @@ export const LoginPage = () => {
         }
 
         const {email, password} = form;
-        login(email, password);
+        const ok = await login(email, password);
+
+        if (!ok){
+            Swal.fire('Error','Verifique usuario/contraseña','error');
+        }
     }
 
     return (
