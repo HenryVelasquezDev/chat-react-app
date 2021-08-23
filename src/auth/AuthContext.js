@@ -37,8 +37,24 @@ export const AuthProvider = ({ children }) => {
 
     }
 
-    const regiter = (nombre, email, password) => {
+    const regiter = async (nombre, email, password) => {
+        const resp = await fetchSinToken('login/new',{ nombre, email, password }, 'POST');
 
+        if (resp.ok ){
+            localStorage.setItem('tokenReactChat', resp.token);
+            const { usuario } = resp;
+            setAuth({
+                uid: usuario.uid,
+                checking: false,
+                logged: true,
+                name: usuario.nombre,
+                email: usuario.email
+            })
+
+            return true;
+        }
+
+        return resp.msg;
     }
 
     const verificaToken = useCallback(() => {

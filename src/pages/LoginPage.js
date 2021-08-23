@@ -16,8 +16,8 @@ export const LoginPage = () => {
 
     useEffect(() => {
         const remembermeEmail = localStorage.getItem('emailChatReact');
-        if ( remembermeEmail ){
-            setForm( (form) => ({ 
+        if (remembermeEmail) {
+            setForm((form) => ({
                 ...form,
                 rememberme: true,
                 email: remembermeEmail
@@ -44,18 +44,22 @@ export const LoginPage = () => {
     const onSubmit = async (ev) => {
         ev.preventDefault();
 
-        if (form.rememberme){
-            localStorage.setItem('emailChatReact', form.email );
-        }else{
+        if (form.rememberme) {
+            localStorage.setItem('emailChatReact', form.email);
+        } else {
             localStorage.removeItem('emailChatReact');
         }
 
-        const {email, password} = form;
+        const { email, password } = form;
         const ok = await login(email, password);
 
-        if (!ok){
-            Swal.fire('Error','Verifique usuario/contraseña','error');
+        if (!ok) {
+            Swal.fire('Error', 'Verifique usuario/contraseña', 'error');
         }
+    }
+
+    const todoOk = () => {
+        return (form.email.length > 0 && form.password.length > 0) ? true : false;
     }
 
     return (
@@ -118,7 +122,11 @@ export const LoginPage = () => {
             </div>
 
             <div className="container-login100-form-btn m-t-17">
-                <button className="login100-form-btn">
+                <button
+                    className="login100-form-btn"
+                    type="submit"
+                    disabled={ !todoOk() }
+                >
                     Ingresar
                 </button>
             </div>
