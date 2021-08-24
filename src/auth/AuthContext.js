@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useState } from "react";
-import { fetchSinToken } from "../helpers/fetch";
+import { fetchConToken, fetchSinToken } from "../helpers/fetch";
 
 
 export const AuthContext = createContext();
@@ -19,9 +19,9 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
 
-        const resp = await fetchSinToken('login',{ email, password }, 'POST');
+        const resp = await fetchSinToken('login', { email, password }, 'POST');
 
-        if (resp.ok ){
+        if (resp.ok) {
             localStorage.setItem('tokenReactChat', resp.token);
             const { usuario } = resp;
             setAuth({
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
                 logged: true,
                 name: usuario.nombre,
                 email: usuario.email
-            })
+            });
         }
 
         return resp.ok;
@@ -38,9 +38,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     const regiter = async (nombre, email, password) => {
-        const resp = await fetchSinToken('login/new',{ nombre, email, password }, 'POST');
+        const resp = await fetchSinToken('login/new', { nombre, email, password }, 'POST');
 
-        if (resp.ok ){
+        if (resp.ok) {
             localStorage.setItem('tokenReactChat', resp.token);
             const { usuario } = resp;
             setAuth({
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
                 logged: true,
                 name: usuario.nombre,
                 email: usuario.email
-            })
+            });
 
             return true;
         }
@@ -57,13 +57,57 @@ export const AuthProvider = ({ children }) => {
         return resp.msg;
     }
 
-    const verificaToken = useCallback(() => {
+    const verificaToken = useCallback( async () => {
 
+        const token = localStorage.getItem('tokenReactChat');
+
+        //Si el token no existe
+        if (!token) {
+            setAuth({
+                uid: null,
+                checking: false,
+                logged: false,
+                name: null,
+                email: null
+            });
+
+            return false;
+        }
+
+        const resp = await fetchConToken('login/renew');
+        if (resp.ok){
+            localStorage.setItem('tokenReactChat', resp.token);
+            const { usuario } = resp;
+            setAuth({
+                uid: usuario.uid,
+                checking: false,
+                logged: true,
+                name: usuario.nombre,
+                email: usuario.email
+            });
+
+            return true;
+        }else{
+            setAuth({
+                uid: null,
+                checking: false,
+                logged: false,
+                name: null,
+                email: null
+            });
+
+            return false;
+        }
 
     }, []);
 
     const logout = () => {
 
+        localStorage.removeItem('tokenReactChat');
+        setAuth({
+            checking: false,
+            logged: false
+        });
     }
 
     return (
