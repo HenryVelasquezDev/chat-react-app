@@ -9,10 +9,15 @@ export const useSocket = (serverPath) => {
 
     const conectarSocket = useCallback(() => {
         
+        const token = localStorage.getItem('tokenReactChat');
+
         const socketTemp = io.connect( serverPath, {
             transports: ['websocket'],
             autoConnect: true,
-            forceNew: true
+            forceNew: true,
+            query: {
+                'x-token': token //se define como x-token para mantenerlo como los headers definidos pero se puede establecer el nombre diferente si se desea
+            }
         });
 
         setSocket(socketTemp);
